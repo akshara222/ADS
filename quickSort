@@ -1,0 +1,64 @@
+#include <iostream>
+using namespace std;
+
+int N;
+
+void traverse(int A[], int pivot) {
+    for (int i = 0; i < N; i++) {
+        if (A[i] == pivot)
+            cout << "[" << A[i] << "] ";
+        else
+            cout << A[i] << " ";
+    }
+    cout << "\n";
+}
+
+int partition(int A[], int BEG, int END) {
+    int LOC = BEG;
+    int LEFT = BEG;
+    int RIGHT = END;
+
+    int pivot = A[LOC];
+
+    cout << "\npivot = " << pivot << "\n";
+    traverse(A, pivot);
+
+    while (LEFT < RIGHT) {
+
+               while (A[LEFT] <= pivot && LEFT < END)
+            LEFT++;
+
+        
+        while (A[RIGHT] > pivot && RIGHT > BEG)
+            RIGHT--;
+
+        if (LEFT < RIGHT) {
+            int temp = A[LEFT];
+            A[LEFT] = A[RIGHT];
+            A[RIGHT] = temp;
+        }
+    }
+
+   
+    int temp = A[BEG];
+    A[BEG] = A[RIGHT];
+    A[RIGHT] = temp;
+
+    LOC = RIGHT;
+
+    return LOC;
+}
+
+int main() {
+    int A[] = {50, 30, 70, 10, 40, 60, 20};
+    N = 7;
+
+    int pos = partition(A, 0, N - 1);
+
+    cout << "\nAfter partition:\n";
+    traverse(A, A[pos]);
+
+    cout << "\nPivot position = " << pos << endl;
+
+    return 0;
+}
