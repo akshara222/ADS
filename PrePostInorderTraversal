@@ -1,0 +1,100 @@
+#include <iostream>
+#include <queue>
+#include <limits>
+
+using namespace std;
+
+// Structure for a binary tree node
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+// Function to insert nodes in level order (for demo purposes)
+Node* insertLevelOrder(int arr[], int n) {
+    if (n == 0) return nullptr;
+
+    Node* root = new Node(arr[0]);
+    queue<Node*> q;
+    q.push(root);
+
+    int i = 1;
+    while (!q.empty() && i < n) {
+        Node* current = q.front();
+        q.pop();
+
+        // Insert left child
+        if (i < n) {
+            current->left = new Node(arr[i++]);
+            q.push(current->left);
+        }
+
+        // Insert right child
+        if (i < n) {
+            current->right = new Node(arr[i++]);
+            q.push(current->right);
+        }
+    }
+    return root;
+}
+
+// Inorder Traversal: Left -> Root -> Right
+void inorder(Node* root) {
+    if (root == nullptr) return;
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
+}
+
+// Preorder Traversal: Root -> Left -> Right
+void preorder(Node* root) {
+    if (root == nullptr) return;
+    cout << root->data << " ";
+    preorder(root->left);
+    preorder(root->right);
+}
+
+// Postorder Traversal: Left -> Right -> Root
+void postorder(Node* root) {
+    if (root == nullptr) return;
+    postorder(root->left);
+    postorder(root->right);
+    cout << root->data << " ";
+}
+
+int main() {
+    int n;
+    cout << "Enter number of nodes: ";
+    if (!(cin >> n) || n <= 0) {
+        cout << "Invalid input. Number of nodes must be a positive integer.\n";
+        return 1;
+    }
+
+    int* arr = new int[n];
+    cout << "Enter " << n << " node values (integers): ";
+    for (int i = 0; i < n; i++) {
+        if (!(cin >> arr[i])) {
+            cout << "Invalid input. Please enter integers only.\n";
+            delete[] arr;
+            return 1;
+        }
+    }
+
+    // Build tree in level order
+    Node* root = insertLevelOrder(arr, n);
+    delete[] arr;
+
+    cout << "\nInorder Traversal: ";
+    inorder(root);
+
+    cout << "\nPreorder Traversal: ";
+    preorder(root);
+
+    cout << "\nPostorder Traversal: ";
+    postorder(root);
+
+    cout << endl;
+    return 0;
+}
