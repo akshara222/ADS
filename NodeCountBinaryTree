@@ -1,0 +1,71 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+// Structure for a binary tree node
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+// Function to count total nodes in the binary tree
+int countNodes(Node* root) {
+    if (root == nullptr) {
+        return 0; // Base case: empty tree has 0 nodes
+    }
+    // Count current node + nodes in left subtree + nodes in right subtree
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+// Helper function to build a binary tree from level-order input
+Node* buildTree() {
+    int val;
+    cout << "Enter root value (-1 for NULL): ";
+    if (!(cin >> val)) {
+        cerr << "Invalid input. Please enter integers only.\n";
+        exit(1);
+    }
+    if (val == -1) return nullptr;
+
+    Node* root = new Node(val);
+    queue<Node*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+
+        cout << "Enter left child of " << current->data << " (-1 for NULL): ";
+        if (!(cin >> val)) {
+            cerr << "Invalid input.\n";
+            exit(1);
+        }
+        if (val != -1) {
+            current->left = new Node(val);
+            q.push(current->left);
+        }
+
+        cout << "Enter right child of " << current->data << " (-1 for NULL): ";
+        if (!(cin >> val)) {
+            cerr << "Invalid input.\n";
+            exit(1);
+        }
+        if (val != -1) {
+            current->right = new Node(val);
+            q.push(current->right);
+        }
+    }
+    return root;
+}
+
+int main() {
+    cout << "Build your binary tree:\n";
+    Node* root = buildTree();
+
+    int totalNodes = countNodes(root);
+    cout << "\nTotal number of nodes in the binary tree: " << totalNodes << endl;
+
+    return 0;
+}
